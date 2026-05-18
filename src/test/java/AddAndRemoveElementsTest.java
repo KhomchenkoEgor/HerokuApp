@@ -7,9 +7,12 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
+
+import static org.testng.Assert.assertEquals;
 
 public class AddAndRemoveElementsTest {
 
@@ -25,19 +28,21 @@ public class AddAndRemoveElementsTest {
     }
 
     @Test
-    public void checkAddElements() {
+    public void checkAddAndRemoveElements() {
+        SoftAssert softAssert = new SoftAssert();
         driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
         driver.findElement(By.xpath("//button[text()='Add Element']")).click();
         driver.findElement(By.xpath("//button[text()='Add Element']")).click();
         int countDelete = driver.findElements(By.xpath("//button[text()='Delete']")).size();
-        Assert.assertEquals(countDelete, 2);
+        softAssert.assertEquals(countDelete, 2);
         // 1. Получаем список всех кнопок Delete
         List<WebElement> deleteButtons = driver.findElements(By.xpath("//button[text()='Delete']"));
         // 2. Нажимаем на вторую (индекс 1)
         deleteButtons.get(1).click();
         // 3. Проверяем, что осталась только одна кнопка (удаляем вторую)
         int countAfterDelete = driver.findElements(By.xpath("//button[text()='Delete']")).size();
-        Assert.assertEquals(countAfterDelete, 1);
+        softAssert.assertEquals(countAfterDelete, 1);
+        softAssert.assertAll();
     }
 
     @AfterMethod

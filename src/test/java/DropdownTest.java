@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 
@@ -26,14 +27,16 @@ public class DropdownTest {
 
     @Test
     public void checkDropdownElements() {
+        SoftAssert softAssert = new SoftAssert();
         driver.get("https://the-internet.herokuapp.com/dropdown");
         Select dropdown = new Select(driver.findElement(By.id("dropdown")));
 
         dropdown.selectByIndex(1);
-        Assert.assertEquals(dropdown.getFirstSelectedOption().getText(), "Option 1");
+        softAssert.assertEquals(dropdown.getFirstSelectedOption().getText(), "Option 1");
 
         dropdown.selectByIndex(2);
-        Assert.assertEquals(dropdown.getFirstSelectedOption().getText(), "Option 2");
+        softAssert.assertEquals(dropdown.getFirstSelectedOption().getText(), "Option 2");
+        softAssert.assertAll();
     }
 
     @AfterMethod
@@ -41,4 +44,3 @@ public class DropdownTest {
         driver.quit();
     }
 }
-
