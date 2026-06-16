@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 
 import java.time.Duration;
@@ -27,6 +28,7 @@ public class TyposTest {
 
     @Test(invocationCount = 10)
     public void checkTypos() {
+        SoftAssert softAssert = new SoftAssert();
         driver.get("https://the-internet.herokuapp.com/typos");
         // Находим все параграфы. На этой странице их два.
         List<WebElement> paragraphs = driver.findElements(By.tagName("p"));
@@ -35,13 +37,14 @@ public class TyposTest {
         // Эталонный текст, который должен быть без ошибок
         String expectedFirstText = "This example demonstrates a typo being introduced. It does it randomly on each page load.";
         // Проверяем соответствие
-        Assert.assertEquals(actualFirstParagraphText, expectedFirstText);
+        softAssert.assertEquals(actualFirstParagraphText, expectedFirstText);
         // Берем текст второго параграфа (индекс 1)
         String actualSecondParagraphText = paragraphs.get(1).getText();
         // Эталонный текст, который должен быть без ошибок
         String expectedSecondText = "Sometimes you'll see a typo, other times you won't.";
         // Проверяем соответствие
-        Assert.assertEquals(actualSecondParagraphText, expectedSecondText);
+        softAssert.assertEquals(actualSecondParagraphText, expectedSecondText);
+        softAssert.assertAll();
     }
 
     @AfterMethod

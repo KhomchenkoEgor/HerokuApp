@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 
 import java.time.Duration;
@@ -27,6 +28,7 @@ public class CheckboxesTest {
 
     @Test
     public void checkCheckboxes() {
+        SoftAssert softAssert = new SoftAssert();
         driver.get("https://the-internet.herokuapp.com/checkboxes");
         // Находим оба чекбокса в список
         List<WebElement> checkboxes = driver.findElements(By.cssSelector("input[type='checkbox']"));
@@ -34,17 +36,18 @@ public class CheckboxesTest {
         WebElement secondCheckbox = checkboxes.get(1);
         // Проверка первого чекбокса
         // 1. Проверяем, что галочки нет (unchecked)
-        Assert.assertFalse(firstCheckbox.isSelected());
+        softAssert.assertFalse(firstCheckbox.isSelected());
         // 2. Ставим галочку
         firstCheckbox.click();
         // 3. Проверяем, что галочка появилась (checked)
-        Assert.assertTrue(firstCheckbox.isSelected());
+        softAssert.assertTrue(firstCheckbox.isSelected());
         // Проверка второго чекбокса
         // На этой странице второй чекбокс нажат по умолчанию
-        Assert.assertTrue(secondCheckbox.isSelected());
+        softAssert.assertTrue(secondCheckbox.isSelected());
         //4. Снимаем галочку
         secondCheckbox.click();
-        Assert.assertFalse(secondCheckbox.isSelected());
+        softAssert.assertFalse(secondCheckbox.isSelected());
+        softAssert.assertAll();
     }
 
     @AfterMethod
